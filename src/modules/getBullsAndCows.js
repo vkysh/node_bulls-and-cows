@@ -13,34 +13,24 @@
  * Example: { bulls: 1, cows: 2 }
  */
 function getBullsAndCows(userInput, numberToGuess) {
-  const res = { bulls: 0, cows: 0 };
-  const guessArr = userInput.split('');
-  const secretArr = numberToGuess.split('');
+  const res = {
+    bulls: 0,
+    cows: 0,
+  };
 
-  const usedSecret = Array(4).fill(false);
-  const usedGuess = Array(4).fill(false);
+  const isBuls = [false, false, false, false];
 
-  for (let i = 0; i < 4; i++) {
-    if (guessArr[i] === secretArr[i]) {
+  const userInputArr = userInput.toString().split('');
+  const numberToGuessArr = numberToGuess.toString().split('');
+
+  userInputArr.forEach((element, index) => {
+    if (element === numberToGuessArr[index]) {
       res.bulls++;
-      usedSecret[i] = true;
-      usedGuess[i] = true;
+      isBuls[index] = true;
+    } else if (numberToGuessArr.includes(element) && !isBuls[index]) {
+      res.cows++;
     }
-  }
-
-  for (let i = 0; i < 4; i++) {
-    if (usedGuess[i]) {
-      continue;
-    }
-
-    for (let j = 0; j < 4; j++) {
-      if (!usedSecret[j] && guessArr[i] === secretArr[j]) {
-        res.cows++;
-        usedSecret[j] = true;
-        break;
-      }
-    }
-  }
+  });
 
   return res;
 }
