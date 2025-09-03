@@ -18,18 +18,31 @@ function getBullsAndCows(userInput, numberToGuess) {
     cows: 0,
   };
 
-  const isBuls = [false, false, false, false];
-
   const userInputArr = userInput.toString().split('');
   const numberToGuessArr = numberToGuess.toString().split('');
 
-  userInputArr.forEach((element, index) => {
-    if (element === numberToGuessArr[index]) {
+  const usedGuess = [false, false, false, false];
+  const usedSecret = [false, false, false, false];
+
+  userInputArr.forEach((digit, i) => {
+    if (digit === numberToGuessArr[i]) {
       res.bulls++;
-      isBuls[index] = true;
-    } else if (numberToGuessArr.includes(element) && !isBuls[index]) {
-      res.cows++;
+      usedGuess[i] = true;
+      usedSecret[i] = true;
     }
+  });
+
+  userInputArr.forEach((digit, i) => {
+    if (usedGuess[i]) {
+      return;
+    }
+
+    numberToGuessArr.forEach((secretDigit, j) => {
+      if (!usedSecret[j] && digit === secretDigit) {
+        res.cows++;
+        usedSecret[j] = true;
+      }
+    });
   });
 
   return res;
